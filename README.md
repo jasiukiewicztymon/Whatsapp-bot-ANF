@@ -1,2 +1,3 @@
-# Whatsapp-bot-ANF
-A Whats'app bot made with puppeteer library
+# Whatsapp Bot
+
+This bot is made to get all the football matches to coach and become rich
