@@ -14,25 +14,6 @@
     <span>{{ publishedBooksMessage }}</span>
   </div>
 
-  <script>
-    Vue.createApp({
-        data() {
-          return {
-            author: {
-              name: 'John Doe',
-              books: [
-              ]
-            }
-          }
-        },
-        computed: {
-          // a computed getter
-          publishedBooksMessage() {
-            // `this` points to the component instance
-            return this.author.books.length > 0 ? 'Yes' : 'No'
-          }
-        }
-    }).mount('#app')
-  </script>
+  <script src="./vue.js"></script>
 </body>
 </html>
