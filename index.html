@@ -5,13 +5,18 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ANF What's app Bot</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
   <script src="https://unpkg.com/vue@3"></script>
 
   <div id="app">
-    <p>Has published books:</p>
-    <span>{{ publishedBooksMessage }}</span>
+    <section id="personalinfo">
+      <header class="">
+        <h1 class="text-center text-5xl text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-green-600">{{personalcollection.name}}</h1>
+      </header>
+    </section>
   </div>
 
   <script src="./vue.js"></script>
