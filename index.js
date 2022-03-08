@@ -100,9 +100,16 @@ var date = "", convocation = "";
                     if (convocation.toLowerCase().includes(e)) {
                         (async function type() {
                             // 2. Writing text
-                            ks.sendText((e).toString());
+                            ks.sendText((date + " " + e + ", " + data.name + " dispo").toString());
+                            // 3. Sending message
+                            await page.waitForSelector('button[class="_4sWnG"]');
+                            page.click('button[class="_4sWnG"]');
+                            // 4. Adding date to json data file
+                            data.date.push(date);
+                            fs.writeFile('./data.json', JSON.stringify(data), function writeJSON(err) {
+                                if (err) return console.log(err);
+                            });
                         })();
-                        console.log(e)
                     }
                 });
             }
