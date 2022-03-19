@@ -11,7 +11,7 @@ function sleep(milliseconds) {
 }
 
 // datas
-var date = "", convocation = "";
+var date = "", convocation = "", res = "";
 
 (async () => {
     try {
@@ -30,22 +30,23 @@ var date = "", convocation = "";
                 const text = await page.evaluate(() => Array.from(document.querySelectorAll('strong')[document.querySelectorAll('strong').length - 1].parentElement.querySelectorAll('strong'), element => element.textContent));
                 for (var j = 0; j < text.length; j++) {
                     convocation = text[j];
-                    // comparing
-                    // 1. Find date
                     date = convocation.substr((convocation.indexOf('.') - 2), 5)
                     if (!data.date.includes(date)) {
                         for (var i = 0; i < data.place.length; i++) {
                             e = data.place[i];
                             if (convocation.toLowerCase().includes(e)) {
                                 (async function type() {
-                                    // 2. Writing text
-                                    var res = date + " " + e + ", " + data.name + " dispo"
-                                    for (var i = 0; i < res.length; i++) {
-                                        page.keyboard.press(res[i]);
+                                    res = date + " " + e + ", " + data.name + " dispo" 
+
+                                    for (var j = 0; j < res.length; j++) {
+                                        page.keyboard.press(res[j]);
                                     }
-                                    // 3. Sending message
-                                    page.keyboard.press('Enter');
-                                    // 4. Adding date to json data file
+
+                                    try {
+                                        page.click("span[data-testid='send']")
+                                    }
+                                    catch {}
+
                                     data.date.push(date);
                                     fs.writeFile('./data.json', JSON.stringify(data), function writeJSON(err) {
                                         if (err) return console.log(err);
@@ -56,7 +57,6 @@ var date = "", convocation = "";
                         }
                     }
                 }
-                sleep(1000)
             }
             catch {}
         }        
