@@ -11,7 +11,7 @@ function sleep(milliseconds) {
 }
 
 // datas
-var date = "", convocation = "", res = "";
+var date = "", convocation = "", res = "", ok = false;
 
 (async () => {
     try {
@@ -28,33 +28,44 @@ var date = "", convocation = "", res = "";
             try {
                 await page.waitForSelector('strong');
                 const text = await page.evaluate(() => Array.from(document.querySelectorAll('strong')[document.querySelectorAll('strong').length - 1].parentElement.querySelectorAll('strong'), element => element.textContent));
-                for (var j = 0; j < text.length; j++) {
-                    convocation = text[j];
-                    date = convocation.substr((convocation.indexOf('.') - 2), 5)
-                    if (!data.date.includes(date)) {
-                        for (var i = 0; i < data.place.length; i++) {
-                            e = data.place[i];
-                            if (convocation.toLowerCase().includes(e)) {
-                                (async function type() {
-                                    res = date + " " + e + ", " + data.name + " dispo" 
-
-                                    for (var j = 0; j < res.length; j++) {
-                                        page.keyboard.press(res[j]);
-                                    }
-
-                                    try {
-                                        page.click("span[data-testid='send']")
-                                    }
-                                    catch {}
-
-                                    data.date.push(date);
-                                    fs.writeFile('./data.json', JSON.stringify(data), function writeJSON(err) {
-                                        if (err) return console.log(err);
-                                    });
-                                })();
-                                break;
+                while (text.length != 0) {
+                    for (var i = 0; i < text.length; i++) {
+                        if (i == 0)
+                            break;
+                        convocation = text[0];
+                        text.shift()
+                        date = convocation.substr((convocation.indexOf('.') - 2), 5)
+                        if (!data.date.includes(date)) {
+                            for (var i = 0; i < data.place.length; i++) {
+                                e = data.place[i];
+                                if (convocation.toLowerCase().includes(e)) {
+                                    (async function type() {
+                                        res = date + " " + e + ", " + data.name + " dispo" 
+    
+                                        for (var j = 0; j < res.length; j++) {
+                                            page.keyboard.press(res[j]);
+                                            ok = true;
+                                        }
+    
+                                        try {
+                                            page.click("span[data-testid='send']")
+                                        }
+                                        catch {}
+    
+                                        data.date.push(date);
+                                        fs.writeFile('./data.json', JSON.stringify(data), function writeJSON(err) {
+                                            if (err) return console.log(err);
+                                        });
+                                    })();
+                                    break;
+                                }
                             }
                         }
+                    }
+
+                    if (ok) {
+                        page.keyboard.press('Enter');
+                        ok = false;
                     }
                 }
             }
